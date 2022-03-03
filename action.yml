@@ -34,4 +34,3 @@ runs:
       with:
         name: result.json
         path: ./result.json
-      shell: bash
