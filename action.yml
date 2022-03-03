@@ -1,0 +1,37 @@
+name: "SHFZ report"
+description: "This action for report shfz."
+inputs:
+  path:
+    description: "application source code path"
+    required: false
+    default: "/"
+runs:
+  using: "composite"
+  steps:
+    - name: export fuzzing report
+      run: >
+        curl
+        -F "hash=${{ github.sha }}"
+        -F "repo=${{ github.repository }}"
+        -F "id=${{ github.run_id }}"
+        -F "job=${{ github.job }}"
+        -F "number=${{ github.run_number }}"
+        -F "path=${{ inputs.path }}"
+        http://localhost:53653/report > report.md
+      shell: bash
+    - name: create issue
+      uses: peter-evans/create-issue-from-file@v3
+      with:
+        title: shfz result
+        content-filepath: ./report.md
+        labels: |
+          shfz
+    - name: export fuzzing data
+      run: curl http://localhost:53653/data > result.json
+      shell: bash
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: result.json
+        path: ./result.json
+      shell: bash
