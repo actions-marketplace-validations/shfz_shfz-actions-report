@@ -1,6 +1,6 @@
 # shfz-actions-report
 
-This action for report shfz.
+This action for report [shfz](https://github.com/shfz/shfz).
 
 Create fuzzing report to issue, and upload fuzzing log to actions artifact.
 
